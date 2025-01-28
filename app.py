@@ -126,6 +126,8 @@ Format the report as follows:
 - Provide details for any violations, referencing only the Rule Names provided, using the following format:
     (number) Rule Name: State the Rule Name associated with the violation (as provided in the rules list).
     Explanation: Provide a short explanation for the violation.
+    
+Rules that have not been violated should not be featured in your report, and do not mention which rules have not been violated.
 """,
             },
         ]
