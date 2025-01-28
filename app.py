@@ -40,6 +40,33 @@ def get_tab_names(sheet):
 
 def get_rules(sheet, client, market):
     """Retrieve rules and rule names for the selected client and market."""
+    # Load the "ALL CLIENTS" tab
+    all_clients_tab = sheet.worksheet("ALL CLIENTS")
+    all_clients_rules = pd.DataFrame(all_clients_tab.get_all_records())
+
+    # Load the client-specific tab
+    client_tab = sheet.worksheet(client)
+    client_rules = pd.DataFrame(client_tab.get_all_records())
+
+    # Filter "ALL CLIENTS" rules to include only those for the selected market or "All"
+    filtered_all_clients_rules = all_clients_rules[
+        (all_clients_rules["Market"] == market) | (all_clients_rules["Market"] == "All")
+    ]
+
+    # Filter client-specific rules for the selected market or "All"
+    filtered_client_rules = client_rules[
+        (client_rules["Market"] == market) | (client_rules["Market"] == "All")
+    ]
+
+    # Combine the filtered rules from both tabs
+    combined_rules = pd.concat([filtered_all_clients_rules, filtered_client_rules], ignore_index=True)
+
+    # Ensure the "Rule" and "Rule Name" columns are present
+    if "Rule" not in combined_rules or "Rule Name" not in combined_rules:
+        raise ValueError("The required 'Rule' or 'Rule Name' columns are missing in the Google Sheet.")
+
+    return combined_rules
+    """Retrieve rules and rule names for the selected client and market."""
     all_clients_tab = sheet.worksheet("ALL CLIENTS")
     client_tab = sheet.worksheet(client)
 
