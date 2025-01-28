@@ -163,6 +163,7 @@ st.sidebar.write("""
 3. Click the "Check Compliance" button to evaluate.
 """)
 
+
 # Google Sheets Initialization
 try:
     sheet = get_google_sheets()
@@ -191,10 +192,16 @@ if st.button("Check Compliance"):
             compliance_reports = check_compliance(document_text, rules_df)
 
             for ruleset, report in compliance_reports.items():
-                st.subheader(f"{ruleset} Report")
+                # st.subheader(f"{ruleset} Report")
+                # print(f"{ruleset} Report")
+                if f"{ruleset}" == "Client Compliance":
+                    st.subheader("Marketing Code Report")
+                else:
+                    st.subheader(f"{ruleset} Report")
+                    
                 if report.startswith("An error occurred"):
                     st.error(report)
                 else:
-                    st.text_area(f"{ruleset} Report", value=report, height=300, disabled=True)
+                    st.text_area(f"{ruleset} Report", value=report, height=300, disabled=True, label_visibility="hidden")
     else:
         st.error("Please upload a document, select a client, and a market.")
